@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
+    public float JumpForce = 1;
     public float MovementSpeed = 1;
     public float Friction = 1;
     public Rigidbody2D rb;
     float HorizontalVelocity = 0;
+    float VerticalVelocity = 0;
 
     void Start()
     {
@@ -13,6 +15,11 @@ public class CharacterMovement : MonoBehaviour
     }
 
     void Update()
+    {
+
+    }
+
+    void FixedUpdate()
     {
         if (Input.GetKey("d"))
         {
@@ -32,12 +39,13 @@ public class CharacterMovement : MonoBehaviour
         {
             HorizontalVelocity = HorizontalVelocity + Friction;
         }
-        
 
-    }
+        if (Input.GetKey("space"))
+        {
+            print("Cum");
+        }
 
-    void FixedUpdate()
-    {
         rb.velocity = new Vector2(HorizontalVelocity, -1);
-    }
+    }   
+
 }
