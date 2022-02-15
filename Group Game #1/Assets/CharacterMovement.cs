@@ -23,31 +23,31 @@ public class CharacterMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Horizontal Velocity-Based Movement
-        if (Input.GetKey("d"))
-        {
-            HorizontalVelocity = HorizontalVelocity + 1 * MovementSpeed;
-        }
-        else if (Input.GetKey("a"))
-        {
-            HorizontalVelocity = HorizontalVelocity - 1 * MovementSpeed;
-        }
-        
         //Gravity Simulation
         if (Grounded == false)
         {
             VerticalVelocity = VerticalVelocity - 1 * Gravity;
         }
         
-        //Jump
-        if (Input.GetKey("space"))
+
+         if (Grounded == true)
         {
-            if (Grounded == true)
+            VerticalVelocity = 0;
+            if (Input.GetKey("space"))
             {
-            VerticalVelocity = VerticalVelocity + 1 * JumpForce;
+                VerticalVelocity = VerticalVelocity + 1 * JumpForce;
+            }
+
+            if (Input.GetKey("d"))
+            {
+                HorizontalVelocity = HorizontalVelocity + 1 * MovementSpeed;
+            }
+            else if (Input.GetKey("a"))
+            {
+                HorizontalVelocity = HorizontalVelocity - 1 * MovementSpeed;
             }
         }
-        
+
         //Friction
         if (HorizontalVelocity > 0 && Grounded == true)
         {
