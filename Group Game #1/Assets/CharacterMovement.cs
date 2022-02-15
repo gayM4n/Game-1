@@ -3,9 +3,11 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     public float JumpForce = 1;
+    public float Gravity = 1;
     public float MovementSpeed = 1;
     public float Friction = 1;
     public Rigidbody2D rb;
+    bool Grounded = false;
     float HorizontalVelocity = 0;
     float VerticalVelocity = 0;
 
@@ -21,6 +23,7 @@ public class CharacterMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        //Horizontal Velocity-Based Movement
         if (Input.GetKey("d"))
         {
             HorizontalVelocity = HorizontalVelocity + 1 * MovementSpeed;
@@ -30,22 +33,45 @@ public class CharacterMovement : MonoBehaviour
             HorizontalVelocity = HorizontalVelocity - 1 * MovementSpeed;
         }
         
+        //Gravity Simulation
+        if (Grounded == false)
+        {
+            VerticalVelocity = VerticalVelocity - 1 * Gravity;
+        }
         
-        if (HorizontalVelocity > 0)
+        //Jump
+        if (Input.GetKey("space"))
+        {
+            if (Grounded == true)
+            {
+            VerticalVelocity = VerticalVelocity + 1 * JumpForce;
+            }
+        }
+        
+        //Friction
+        if (HorizontalVelocity > 0 && Grounded == true)
         {
             HorizontalVelocity = HorizontalVelocity - Friction;
         }
-        else if (HorizontalVelocity < 0)
+        else if (HorizontalVelocity < 0 && Grounded == true)
         {
             HorizontalVelocity = HorizontalVelocity + Friction;
         }
 
-        if (Input.GetKey("space"))
-        {
-            print("Cum");
-        }
-
-        rb.velocity = new Vector2(HorizontalVelocity, -1);
+        //Movement Update
+        rb.velocity = new Vector2(HorizontalVelocity, VerticalVelocity);
     }   
+
+//Checks if grounded
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        Grounded = true;
+    }
+
+//Checks if not grounded
+    void OnTriggerExit2D(Collider2D collider)
+    {
+        Grounded = false;
+    }
 
 }
