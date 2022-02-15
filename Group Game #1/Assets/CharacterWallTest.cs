@@ -4,13 +4,13 @@ public class CharacterWallTest : MonoBehaviour
 {
     public bool IsWalled;
 
-    void OnTriggerEnter2D(Collider2D collider)
+    void OnTriggerStay2D(Collider2D other)
     {
         IsWalled = true;
         print("Walled");
     }
 
-    void OnTriggerExit2D(Collider2D collider)
+    void OnTriggerExit2D(Collider2D other)
     {
         IsWalled = false;
         print("Unwalled");

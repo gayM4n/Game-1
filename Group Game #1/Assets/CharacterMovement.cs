@@ -6,10 +6,10 @@ public class CharacterMovement : MonoBehaviour
     public float Gravity = 1;
     public float MovementSpeed = 1;
     public float Friction = 1;
-    public Rigidbody2D rb;
     bool Grounded = false;
     float HorizontalVelocity = 0;
     float VerticalVelocity = 0;
+    public Rigidbody2D rb;
 
     void Start()
     {
@@ -30,7 +30,7 @@ public class CharacterMovement : MonoBehaviour
         }
         
 
-         if (Grounded == true)
+        if (Grounded == true)
         {
             VerticalVelocity = 0;
             if (Input.GetKey("space"))
@@ -63,15 +63,17 @@ public class CharacterMovement : MonoBehaviour
     }   
 
 //Checks if grounded
-    void OnTriggerEnter2D(Collider2D collider)
+    void OnTriggerStay2D(Collider2D other)
     {
         Grounded = true;
+        print("grounded");
     }
 
 //Checks if not grounded
-    void OnTriggerExit2D(Collider2D collider)
+    void OnTriggerExit2D(Collider2D other)
     {
         Grounded = false;
+        print("ungrounded");
     }
 
 }
