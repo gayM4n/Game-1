@@ -845,11 +845,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Child: {fileID: 714711986}
   Child1: {fileID: 1694228344}
-  WallJumpMultiplier: 0
+  WallJumpMultiplier: 1
   JumpForce: 30
   Gravity: 1
   MovementSpeed: 1
   Friction: 0.5
+  SlideCooldown: 1
+  SlideStartup: 5
+  SlideSlowdown: 1.1
   HorizontalMoveLimit: 100
   VerticalMoveLimit: 100
   rb: {fileID: 0}

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
@@ -6,11 +8,16 @@ public class CharacterMovement : MonoBehaviour
     CharacterWallTestLeft WallTestLeft;
     public GameObject Child;
     public GameObject Child1;
-    public float WallJumpMultiplier;
+    public float WallJumpMultiplier = 1;
     public float JumpForce = 1;
     public float Gravity = 1;
     public float MovementSpeed = 1;
     public float Friction = 1;
+    bool Sliding = false;
+    public float SlideCooldown = 1f; 
+    public float SlideStartup = 1.5f;
+    public float SlideSlowdown = 1.1f;
+    private float TimeNextSlide;
     bool Grounded = false;
     public float HorizontalMoveLimit = 10;
     public float VerticalMoveLimit = 10;
@@ -30,6 +37,17 @@ public class CharacterMovement : MonoBehaviour
 
     }
 
+    IEnumerator Slide()
+    {
+        if (Sliding == true)
+        {
+            for (int r = 10; r != 0; r--)
+            {
+                HorizontalVelocity /= SlideSlowdown;
+                yield return new WaitForSeconds(0.05f);
+            }
+        }
+    }
     void FixedUpdate()
     {
         //Gravity Simulation
@@ -95,13 +113,24 @@ public class CharacterMovement : MonoBehaviour
         //Grounded movement
         if (Grounded == true)
         {
+            //Slide movement, cooldown script taken from https://answers.unity.com/questions/979929/adding-a-cooldown-time-to-a-attack.html
+            if (Input.GetKey("u") && Time.time > TimeNextSlide)
+            {
+                TimeNextSlide = Time.time + SlideCooldown;
+                Sliding = true;
+                HorizontalVelocity *= SlideStartup;
+                StartCoroutine(Slide());
+            }
+            else
+            {
+                Sliding = false;
+            }
             VerticalVelocity = 0;
             if (Input.GetKey("space"))
             {
                 VerticalVelocity = VerticalVelocity + 1 * JumpForce;
             }
-
-            if (Input.GetKey("d"))
+            else if (Input.GetKey("d"))
             {
                 HorizontalVelocity = HorizontalVelocity + 1 * MovementSpeed;
             }
@@ -112,11 +141,11 @@ public class CharacterMovement : MonoBehaviour
         }
 
         //Friction
-        if (HorizontalVelocity > 0 && Grounded == true)
+        if (HorizontalVelocity > 0 && Grounded == true && Sliding == false )
         {
             HorizontalVelocity = HorizontalVelocity - Friction;
         }
-        else if (HorizontalVelocity < 0 && Grounded == true)
+        else if (HorizontalVelocity < 0 && Grounded == true && Sliding == false)
         {
             HorizontalVelocity = HorizontalVelocity + Friction;
         }
