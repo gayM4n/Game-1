@@ -114,18 +114,25 @@ public class CharacterMovement : MonoBehaviour
         if (Grounded == true)
         {
             //Slide movement, cooldown script taken from https://answers.unity.com/questions/979929/adding-a-cooldown-time-to-a-attack.html
-            if (Input.GetKey("u") && Time.time > TimeNextSlide)
+            if (Input.GetKey("u"))
             {
-                TimeNextSlide = Time.time + SlideCooldown;
-                Sliding = true;
-                HorizontalVelocity *= SlideStartup;
-                StartCoroutine(Slide());
+                if (Grounded == true && Time.time > TimeNextSlide)
+                {
+                    TimeNextSlide = Time.time + SlideCooldown;
+                    Sliding = true;
+                    HorizontalVelocity *= SlideStartup;
+                    StartCoroutine(Slide());
+                }
+                if (Grounded == false)
+                {
+                    VerticalVelocity = 1;
+                    print("Airsliding");
+                }
             }
             else
             {
                 Sliding = false;
             }
-            VerticalVelocity = 0;
             if (Input.GetKey("space"))
             {
                 VerticalVelocity = VerticalVelocity + 1 * JumpForce;
